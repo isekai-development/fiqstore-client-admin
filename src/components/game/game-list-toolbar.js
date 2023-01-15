@@ -12,7 +12,7 @@ import { Download as DownloadIcon } from "../../icons/download";
 import { Search as SearchIcon } from "../../icons/search";
 import { Upload as UploadIcon } from "../../icons/upload";
 
-export const ProductListToolbar = (props) => (
+export const GameListToolbar = (props) => (
   <Box {...props}>
     <Box
       sx={{
@@ -24,7 +24,7 @@ export const ProductListToolbar = (props) => (
       }}
     >
       <Typography sx={{ m: 1 }} variant="h4">
-        Products
+        Games
       </Typography>
       <Box sx={{ m: 1 }}>
         <Button startIcon={<UploadIcon fontSize="small" />} sx={{ mr: 1 }}>
@@ -34,7 +34,7 @@ export const ProductListToolbar = (props) => (
           Export
         </Button>
         <Button color="primary" variant="contained" onClick={props.handleOpen}>
-          Add products
+          Add games
         </Button>
       </Box>
     </Box>

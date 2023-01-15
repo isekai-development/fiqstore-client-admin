@@ -1,35 +1,25 @@
 import Head from "next/head";
 import { Box, Container } from "@mui/material";
-import { ProductListToolbar } from "../components/product/product-list-toolbar";
+import { GameListToolbar } from "../components/game/game-list-toolbar";
 import { DashboardLayout } from "../components/dashboard-layout";
-import { ProductListResults } from "../components/product/product-list-results";
+import { GameListResults } from "../components/game/game-list-results";
 import { customers } from "../__mocks__/customers";
 import { useEffect, useState } from "react";
-import Product from "../services/Product";
 import Game from "../services/Game";
-import { ProductAddModal } from "../components/product/product-add-modal";
+import { GameAddModal } from "../components/game/game-add-modal";
 
 const Page = () => {
-  const productService = new Product();
   const gameService = new Game();
 
   const [games, setGames] = useState([]);
-  const [products, setProducts] = useState([]);
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-  const [newProduct, setNewProduct] = useState({ amount: "", unit: "", gameId: "", price: "" });
+  const [newGame, setNewGame] = useState({ name: "", engine: "", logo: "" });
 
   useEffect(() => {
-    fetchProducts();
     fetchGames();
   }, []);
-
-  const fetchProducts = async () => {
-    productService.getVouchers().then((res) => {
-      setProducts(res);
-    });
-  };
 
   const fetchGames = async () => {
     await gameService.getGames().then((res) => {
@@ -37,23 +27,23 @@ const Page = () => {
     });
   };
 
-  const handleChangeNewProduct = (key, value) => {
-    setNewProduct((prev) => ({
+  const handleChangeNewGame = (key, value) => {
+    setNewGame((prev) => ({
       ...prev,
       [key]: value,
     }));
   };
 
   const onSubmit = async () => {
-    await productService.addVoucher(newProduct);
-    fetchProducts();
-    setNewProduct({ amount: "", unit: "", gameId: "", price: "" });
+    await gameService.addGame(newGame);
+    fetchGames();
+    setNewGame({ name: "", engine: "", logo: "" });
     setOpen(false);
   };
   return (
     <>
       <Head>
-        <title>Products | Fiqstore</title>
+        <title>Games | Fiqstore</title>
       </Head>
       <Box
         component="main"
@@ -63,17 +53,16 @@ const Page = () => {
         }}
       >
         <Container maxWidth={false}>
-          <ProductListToolbar handleOpen={handleOpen} />
-          <ProductAddModal
+          <GameListToolbar handleOpen={handleOpen} />
+          <GameAddModal
             handleClose={handleClose}
             open={open}
-            handleChangeNewProduct={handleChangeNewProduct}
-            state={newProduct}
+            handleChangeNewGame={handleChangeNewGame}
             onSubmit={onSubmit}
-            games={games}
+            state={newGame}
           />
           <Box sx={{ mt: 3 }}>
-            <ProductListResults products={products} />
+            <GameListResults games={games} />
           </Box>
         </Container>
       </Box>
