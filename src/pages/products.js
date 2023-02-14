@@ -17,8 +17,17 @@ const Page = () => {
   const [products, setProducts] = useState([]);
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
-  const [newProduct, setNewProduct] = useState({ amount: "", unit: "", gameId: "", price: "" });
+  const handleClose = () => {
+    setNewProduct({ amount: "", unit: "", gameId: "", price: "", id: "" });
+    setOpen(false);
+  };
+  const [newProduct, setNewProduct] = useState({
+    amount: "",
+    unit: "",
+    gameId: "",
+    price: "",
+    id: "",
+  });
 
   useEffect(() => {
     fetchProducts();
@@ -37,6 +46,17 @@ const Page = () => {
     });
   };
 
+  const setEditProduct = (product) => {
+    setNewProduct({
+      amount: product.amount,
+      unit: product.unit,
+      gameId: product.game._id,
+      price: product.price,
+      id: product._id,
+    });
+    setOpen(true);
+  };
+
   const handleChangeNewProduct = (key, value) => {
     setNewProduct((prev) => ({
       ...prev,
@@ -45,10 +65,17 @@ const Page = () => {
   };
 
   const onSubmit = async () => {
-    await productService.addVoucher(newProduct);
+    if (newProduct.id) await productService.editVoucher(newProduct);
+    if (!newProduct.id) await productService.addVoucher(newProduct);
     fetchProducts();
-    setNewProduct({ amount: "", unit: "", gameId: "", price: "" });
+    setNewProduct({ amount: "", unit: "", gameId: "", price: "", id: "" });
     setOpen(false);
+  };
+
+  const deleteProduct = async (id) => {
+    await productService.deleteVoucher(id);
+    fetchProducts();
+    setNewProduct({ amount: "", unit: "", gameId: "", price: "", id: "" });
   };
   return (
     <>
@@ -73,7 +100,11 @@ const Page = () => {
             games={games}
           />
           <Box sx={{ mt: 3 }}>
-            <ProductListResults products={products} />
+            <ProductListResults
+              products={products}
+              setEditProduct={setEditProduct}
+              deleteProduct={deleteProduct}
+            />
           </Box>
         </Container>
       </Box>

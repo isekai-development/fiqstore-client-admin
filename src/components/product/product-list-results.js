@@ -5,6 +5,7 @@ import { format } from "date-fns";
 import {
   Avatar,
   Box,
+  Button,
   Card,
   Checkbox,
   Table,
@@ -17,7 +18,7 @@ import {
 } from "@mui/material";
 import { getInitials } from "../../utils/get-initials";
 
-export const ProductListResults = ({ products, ...rest }) => {
+export const ProductListResults = ({ products, setEditProduct, deleteProduct, ...rest }) => {
   const [selectedProductIds, setSelectedProductIds] = useState([]);
   const [limit, setLimit] = useState(10);
   const [page, setPage] = useState(0);
@@ -83,6 +84,7 @@ export const ProductListResults = ({ products, ...rest }) => {
                 <TableCell>Game</TableCell>
                 <TableCell>Amount</TableCell>
                 <TableCell>Price</TableCell>
+                <TableCell>Action</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -115,6 +117,12 @@ export const ProductListResults = ({ products, ...rest }) => {
                     </Typography>
                   </TableCell>
                   <TableCell>Rp {product.price.toLocaleString("id-ID")}</TableCell>
+                  <TableCell>
+                    <Button onClick={() => setEditProduct(product)}>Edit</Button>
+                    <Button color="error" onClick={() => deleteProduct(product._id)}>
+                      Delete
+                    </Button>
+                  </TableCell>
                 </TableRow>
               ))}
             </TableBody>
